@@ -16,8 +16,8 @@ class NotesView {
   }
 
   addNotes(titleText) {
-    console.log('whats the api?', this.api) //debugging
-    console.log('what the return of displayNotesFromApi', this.displayNotesFromApi()); //debugging
+    // console.log('whats the api?', this.api) //debugging
+    // console.log('what the return of displayNotesFromApi', this.displayNotesFromApi()); //debugging
     this.api.createNote(titleText, this.displayNotesFromApi);
   }
 
@@ -36,7 +36,7 @@ class NotesView {
   };
 
   displayNotesFromApi() {
-    // this.model.reset() //need to put this in, do our test cover this though
+    this.model.reset() //need to put this in, do our test cover this though
     console.log('is there an api here?', this.api); //debugging
     this.api.loadNotes((data) => {
       data.forEach((note) => {

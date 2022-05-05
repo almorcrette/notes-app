@@ -7,12 +7,17 @@ const { hasUncaughtExceptionCaptureCallback } = require('process');
 const NotesView = require('./NotesView');
 
 const mockedModel = {
-  getNotes: () => ['This is an example note', 'Another note']
+  getNotes: () => ['This is an example note', 'Another note'],
+  addNote: () => undefined
 };
 
 const anotherMockedModel = {
   getNotes: () => ['This is an example note', 'Another note', 'My first note title'],
   addNote: (titleText) => undefined
+};
+
+const mockedApi = {
+  loadNotes: () => ['This is an example note', 'Another note']
 };
 
 describe('NotesView', () => {
@@ -56,4 +61,13 @@ describe('NotesView', () => {
     })
   })
 
+  describe('.displayNotesFromApi', () => {
+    it('calls loadNotes on the API class and lists notes on model and displays notes', () => {
+      document.body.innerHTML = fs.readFileSync('./index.html');
+      const notesView = new NotesView(mockedModel, mockedApi)
+      notesView.displayNotesFromApi(() => {
+        expect(document.querySelectorAll('div.note').length).toBe(2);
+      })
+    })
+  })
 })

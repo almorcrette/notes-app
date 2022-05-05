@@ -2,7 +2,7 @@ const NotesApi = require('./NotesApi');
 const notesModel = require('./notesModel');
 
 class NotesView {
-  constructor(model = new notesModel, api = new NotesApi) {
+  constructor(model = new notesModel(), api = new NotesApi()) {
     this.model = model
     this.api = api
     this.mainContainerEl = document.querySelector('#main-container');
@@ -16,8 +16,9 @@ class NotesView {
   }
 
   addNotes(titleText) {
-    this.model.addNote(titleText);
-    this.displayNotes()
+    console.log('whats the api?', this.api) //debugging
+    console.log('what the return of displayNotesFromApi', this.displayNotesFromApi()); //debugging
+    this.api.createNote(titleText, this.displayNotesFromApi);
   }
 
   displayNotes() {
@@ -35,6 +36,8 @@ class NotesView {
   };
 
   displayNotesFromApi() {
+    // this.model.reset() //need to put this in, do our test cover this though
+    console.log('is there an api here?', this.api); //debugging
     this.api.loadNotes((data) => {
       data.forEach((note) => {
         this.model.addNote(note);

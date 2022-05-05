@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "jest": "^28.0.3",
-    "jest-fetch-mock": "^3.0.3"
+    "jest-fetch-mock": "^3.0.3",
+    "jest-mock-fetch": "^2.0.5"
   },
   "devDependencies": {
     "jest-environment-jsdom": "^28.0.2"

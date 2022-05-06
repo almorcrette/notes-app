@@ -45,6 +45,11 @@ class NotesView {
     })
   }
 
+  displayError() {
+    let errorMessageEl = document.querySelector('div#error-message');
+    errorMessageEl.textContent = 'Oops, something went wrong!';
+  }
+
 }
 
 module.exports = NotesView;

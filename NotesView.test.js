@@ -111,7 +111,7 @@ describe('NotesView', () => {
       document.body.innerHTML = fs.readFileSync('./index.html')
       const notesView = new NotesView(mockedModel, mockedApi);
       notesView.displayError();
-      expect(document.querySelector('#error-message').innerHTML).toBe('Oops, something went wrong!')
+      expect(document.querySelector('div#error-message').innerHTML).toBe('Oops, something went wrong!')
     })
   })
 })

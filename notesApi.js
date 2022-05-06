@@ -9,7 +9,7 @@ class NotesApi {
       })
       .catch((error) => {
         console.log('Load Error', error);
-        errorCB();
+        errorCB('loading saved notes');
       })
   }
 
@@ -17,7 +17,7 @@ class NotesApi {
     return data[data.length - 1];
   }
 
-  createNote(noteText) {
+  createNote(noteText, errorCB) {
     fetch('http://localhost:3000/notes', {
       method: 'POST',
       headers: {
@@ -31,6 +31,7 @@ class NotesApi {
     })
     .catch((error) => {
       console.error('Error:', error);
+      errorCB('saving the new note');
     })
   };
 }

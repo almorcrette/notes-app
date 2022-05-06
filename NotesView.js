@@ -20,7 +20,7 @@ class NotesView {
     const newNote = {
       "content": titleText
     }
-    this.api.createNote(newNote);
+    this.api.createNote(newNote, this.displayError);
     this.displayNotes()
   }
 
@@ -47,9 +47,9 @@ class NotesView {
       this.displayError)
   }
 
-  displayError() {
+  displayError(apiQuery) {
     let errorMessageEl = document.querySelector('div#error-message');
-    errorMessageEl.textContent = 'Oops, something went wrong!';
+    errorMessageEl.textContent = `Oops, something went wrong when ${apiQuery}!`;
   }
 
 }

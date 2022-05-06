@@ -39,10 +39,12 @@ class NotesView {
   };
 
   displayNotesFromApi() {
-    this.api.loadNotes((presetNotes) => {
-      this.model.setNotes(presetNotes);
-      this.displayNotes();
-    })
+    this.api.loadNotes(
+      (presetNotes) => {
+        this.model.setNotes(presetNotes);
+        this.displayNotes();
+      },
+      this.displayError)
   }
 
   displayError() {

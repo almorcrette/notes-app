@@ -1,14 +1,15 @@
 class NotesApi {
   
 
-  loadNotes(callback) {
+  loadNotes(successCB, errorCB) {
     fetch('http://localhost:3000/notes')
       .then(response => response.json())
       .then((data) => {
-        callback(data);
+        successCB(data);
       })
       .catch((error) => {
         console.log('Load Error', error);
+        errorCB();
       })
   }
 

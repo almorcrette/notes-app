@@ -7,13 +7,18 @@ const { hasUncaughtExceptionCaptureCallback } = require('process');
 const NotesView = require('./NotesView');
 
 const mockedModel = {
-  getNotes: () => ['This is an example note', 'Another note'],
+  getNotes: () => ['firstMockedModelNote', 'secondMockedModelNote'],
   addNote: () => undefined,
   setNotes: () => undefined
 };
 
 const anotherMockedModel = {
-  getNotes: () => ['This is an example note', 'Another note', 'My first note title'],
+  getNotes: () => [
+    'firstAnotherMockedModelNote',
+    'secondAnotherMockedModelNote',
+    'thirdAnotherMockedModelNote',
+    'Added Note'
+  ],
 };
 
 anotherMockedModel.addNote = jest.fn()
@@ -56,26 +61,38 @@ describe('NotesView', () => {
   })
 
   describe('.addNotes', () => {
-   
-    document.body.innerHTML = fs.readFileSync('./index.html')
-    const notesView = new NotesView(anotherMockedModel, mockedApi);
-    const noteTitleInputEl = document.querySelector('#note-title-input');
-    noteTitleInputEl.value = "My first note title";
-    const noteTitleSubmitEl = document.querySelector('#note-title-submit');
-    noteTitleSubmitEl.click();
-
+    
     it("calls the model's addNotes method with the input text", () => {
-      expect(notesView.model.addNote).toHaveBeenCalledWith("My first note title");
+      document.body.innerHTML = fs.readFileSync('./index.html')
+      const notesView = new NotesView(anotherMockedModel, mockedApi);
+      const noteTitleInputEl = document.querySelector('#note-title-input');
+      noteTitleInputEl.value = "Added Note";
+      const noteTitleSubmitEl = document.querySelector('#note-title-submit');
+      noteTitleSubmitEl.click();
+      expect(notesView.model.addNote).toHaveBeenCalledWith("Added Note");
     })
 
     it("calls the api's createNote method with the input text as the value of a new note's content", () => {
+      document.body.innerHTML = fs.readFileSync('./index.html')
+      const notesView = new NotesView(anotherMockedModel, mockedApi);
+      const noteTitleInputEl = document.querySelector('#note-title-input');
+      noteTitleInputEl.value = "Added Note";
+      const noteTitleSubmitEl = document.querySelector('#note-title-submit');
+      noteTitleSubmitEl.click();
       expect(notesView.api.createNote).toHaveBeenCalledWith({
-        "content": "My first note title"
+        "content": "Added Note"
       });
     });
 
-
-
+    test('displays the note on the page', () => {
+      document.body.innerHTML = fs.readFileSync('./index.html')
+      const notesView = new NotesView(anotherMockedModel, mockedApi);
+      const noteTitleInputEl = document.querySelector('#note-title-input');
+      noteTitleInputEl.value = "Added Note";
+      const noteTitleSubmitEl = document.querySelector('#note-title-submit');
+      noteTitleSubmitEl.click();
+      expect(document.querySelectorAll('div.note').length).toBe(4);
+    })
   })
 
   describe('.displayNotesFromApi', () => {

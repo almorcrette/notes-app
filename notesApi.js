@@ -12,7 +12,7 @@ class NotesApi {
     return data[data.length - 1];
   }
 
-  createNote(noteText, callback) {
+  createNote(noteText) {
     fetch('http://localhost:3000/notes', {
       method: 'POST',
       headers: {
@@ -21,8 +21,8 @@ class NotesApi {
       body: JSON.stringify(noteText)
     })
     .then(response => response.json())
-    .then(data => {
-      console.log('Success:', callback(data));
+    .then( (data) => {
+      console.log('Success:', data);
     })
     .catch((error) => {
       console.error('Error:', error);

@@ -14,15 +14,29 @@ const mockedModel = {
 
 const anotherMockedModel = {
   getNotes: () => ['This is an example note', 'Another note', 'My first note title'],
-  addNote: (titleText) => 'My first note title'
 };
+
+anotherMockedModel.addNote = jest.fn()
+  .mockReturnValue('My first note title')
 
 const mockedApi = {
   loadNotes: () => ['This is an example note', 'Another note'],
   createNote: () => undefined
 };
 
+mockedApi.createNote = jest.fn()
+
 describe('NotesView', () => {
+  it('clears the text field after submitting a note', () => {
+    document.body.innerHTML = fs.readFileSync('./index.html');
+    const notesView = new NotesView(anotherMockedModel, mockedApi);
+    const noteTitleInputEl = document.querySelector('#note-title-input');
+    noteTitleInputEl.value = "My first note title";
+    const noteTitleSubmitEl = document.querySelector('#note-title-submit');
+    noteTitleSubmitEl.click();
+    expect(noteTitleInputEl.value).toBe('');
+  })
+
   describe('.displayNotes', () => {
     it("gets the notes from model and displays it as a new div element with class 'note'", () => {
       document.body.innerHTML = fs.readFileSync('./index.html');
@@ -42,27 +56,26 @@ describe('NotesView', () => {
   })
 
   describe('.addNotes', () => {
-    it('adds a new note with custom title', () => {
-      document.body.innerHTML = fs.readFileSync('./index.html')
-      const notesView = new NotesView(anotherMockedModel, mockedApi);
-      const noteTitleInputEl = document.querySelector('#note-title-input');
-      noteTitleInputEl.value = "My first note title";
-      const noteTitleSubmitEl = document.querySelector('#note-title-submit');
-      noteTitleSubmitEl.click();
-      expect(notesView.model.addNote('My first note title')).toHaveBeenCalled();
-      // expect(document.querySelectorAll('div.note').length).toBe(3);
+   
+    document.body.innerHTML = fs.readFileSync('./index.html')
+    const notesView = new NotesView(anotherMockedModel, mockedApi);
+    const noteTitleInputEl = document.querySelector('#note-title-input');
+    noteTitleInputEl.value = "My first note title";
+    const noteTitleSubmitEl = document.querySelector('#note-title-submit');
+    noteTitleSubmitEl.click();
+
+    it("calls the model's addNotes method with the input text", () => {
+      expect(notesView.model.addNote).toHaveBeenCalledWith("My first note title");
     })
 
-  
-    it('clears the text field after submitting a note', () => {
-      document.body.innerHTML = fs.readFileSync('./index.html');
-      const notesView = new NotesView(anotherMockedModel, mockedApi);
-      const noteTitleInputEl = document.querySelector('#note-title-input');
-      noteTitleInputEl.value = "My first note title";
-      const noteTitleSubmitEl = document.querySelector('#note-title-submit');
-      noteTitleSubmitEl.click();
-      expect(noteTitleInputEl.value).toBe('');
-    })
+    it("calls the api's createNote method with the input text as the value of a new note's content", () => {
+      expect(notesView.api.createNote).toHaveBeenCalledWith({
+        "content": "My first note title"
+      });
+    });
+
+
+
   })
 
   describe('.displayNotesFromApi', () => {

@@ -8,6 +8,8 @@ class NotesView {
     this.mainContainerEl = document.querySelector('#main-container');
     this.NoteTitleSubmitEl = document.querySelector('#note-title-submit');
     this.noteTitleInputEl = document.querySelector('#note-title-input');
+    this.oldErrorMessages = document.querySelectorAll('.error-message');
+
 
     this.NoteTitleSubmitEl.addEventListener('click', () => {
       this.addNotes(this.noteTitleInputEl.value);
@@ -20,7 +22,14 @@ class NotesView {
     const newNote = {
       "content": titleText
     }
-    this.api.createNote(newNote, this.displayError);
+    this.api.createNote(newNote,
+      () => {
+        let oldErrorMessages = document.querySelectorAll('.error-message');
+        oldErrorMessages.forEach((errorMessage) => {
+          errorMessage.remove();
+        })
+      },
+      this.displayError);
     this.displayNotes()
   }
 
@@ -28,7 +37,7 @@ class NotesView {
     const oldNotes = document.querySelectorAll('div.note');
     oldNotes.forEach((note) => {
       note.remove();
-    })
+    });
     let notes = this.model.getNotes();
     for (let i = 0; i < notes.length; i++) {
       let newElement = document.createElement('div');
@@ -42,15 +51,28 @@ class NotesView {
     this.api.loadNotes(
       (presetNotes) => {
         this.model.setNotes(presetNotes);
+        let oldErrorMessages = document.querySelectorAll('.error-message');
+        oldErrorMessages.forEach((errorMessage) => {
+          errorMessage.remove();
+        });
         this.displayNotes();
       },
       this.displayError)
   }
 
   displayError(apiQuery) {
-    let errorMessageEl = document.querySelector('div#error-message');
-    errorMessageEl.textContent = `Oops, something went wrong when ${apiQuery}!`;
+    let oldErrorMessages = document.querySelectorAll('.error-message');
+    oldErrorMessages.forEach((errorMessage) => {
+      errorMessage.remove();
+    });
+    let errorAreaEl = document.querySelector('#error-area');
+    let errorMessageEl = document.createElement('div');
+    errorMessageEl.classList.add('error-message');
+    errorMessageEl.innerText = `Oops, something went wrong when ${apiQuery}!`;
+    errorAreaEl.append(errorMessageEl);
   }
+
+
 
 }
 

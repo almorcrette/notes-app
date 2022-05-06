@@ -38,8 +38,8 @@ button {
   cursor: pointer;
 }
 
-/* #error-message {
+div.error-message {
   background: #DDE5FC;
   border: 1px solid #3F5341;
   padding: 15px;
-} */
+}
